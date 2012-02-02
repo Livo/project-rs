@@ -1,0 +1,2 @@
+player: |lol1| rule: 0| muted: no
+|player: lol1| rule: 0| muted: no

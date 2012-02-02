@@ -1,0 +1,145 @@
+
+Lol command: tele 1 1
+Lol command: pickup 4035 1
+Lol command: emote 1
+Lol command: home
+Lol command: pickup 2570 1
+Lol command: npc 2745
+Lol command: switch
+Lol command: yell hi
+Lol command: tele 2999 3377
+Lol command: players
+Lol command: players
+Lol command: players
+Lol command: players
+Lol command: switch
+Lol command: mypos
+Lol command: unmuted1
+Lol command: unmuted1
+Lol command: pickup 4151 1
+Lol command: master
+Lol command: unmute Lol
+Lol command: unmuted 1
+Lol command: unmuted1
+Lol command: npcreset
+Lol command: empty
+Lol command: char
+Lol command: bank
+Bobboi command: pickup 4213 1
+Bobboi command: pickup 4214 1
+Bobboi command: pickup 4151 1
+Bobboi command: emote 28
+Bobboi command: xnpc
+Lol command: mypos
+Lol command: mypos
+Lol command: mypos
+Lol command: mypos
+Lol command: mypos
+Lol command: noclip
+Lol command: mypos
+Lol command: tele 3260 3437
+Lol command: noclip
+Prism command: pickup 1511 1
+Prism command: pickup 590
+Prism command: pickup 590 1
+Prism command: bank
+Prism command: pickup 1512 1000000000
+Prism command: bank
+Prism command: sound 504
+Prism command: bank
+Prism command: pickup 315 1
+Prism command: pickup 318 1000
+Prism command: bank
+Prism command: bank
+Prism command: bank
+Prism command: bank
+Prism command: pickup 1079 1
+Prism command: master
+Prism command: setlevel 1 99
+Prism command: setlevel 0 99
+Prism command: setlevel 2 99
+Prism command: pickup 1079 1
+2007 command: pickup 1149 1
+2007 command: pickup 7158 1
+2007 command: pickup 1123 1
+2007 command: pickup 1037 1
+2007 command: pickup 1033 1
+2007 command: pickup 1032 1
+2007 command: pickup 1031 1
+2007 command: bank
+2007 command: emote 484
+2007 command: emote 500
+2007 command: pickup 1351 1
+2007 command: pickup 1307 1
+2007 command: emote 407
+2007 command: emote 2563
+Livo command: noclip
+Livo command: herblore
+Livo command: herblore
+Livo command: Herblore
+Livo command: Herblore
+Livo command: empty
+Livo command: Herblore
+Livo command: Herblore
+Livo command: pickup 10 1
+Livo command: herblore
+Livo command: Herblore
+Livo command: Herblore
+Livo command: pickup 199 1
+Livo command: bank
+Livo command: empty
+Livo command: pickup 201 1
+Livo command: pickup 201 1
+Livo command: pickup 203 1
+Livo command: pickup 269 1
+Livo command: pickup 211 1
+Livo command: empty
+Livo command: menu
+Livo command: menu
+Livo command: empty
+Livo command: noclip
+Livo command: noclip
+Livo command: xteletome thegreez
+Livo command: tele 2964 3394
+Livo command: test
+Livo command: test
+Livo command: test
+Livo command: Test
+Livo command: Test
+Livo command: test
+Livo command: test
+Livo command: test
+Livo command: test
+Livo command: test
+Livo command: test
+Livo command: test
+Livo command: music 23
+Livo command: pickup 199 1
+Livo command: pickup 249 1
+Livo command: pickup 249 1
+Livo command: empty
+Livo command: pickup 249 1
+Livo command: pickup 227 1
+Livo command: pickup 249 1
+Livo command: pickup 277 1
+Livo command: pickup 227 1
+Livo command: pickup 221 2
+Livo command: pickup 221 1
+Livo command: pickup 93 1
+Livo command: pickup 235 1
+Livo command: pickup 91 1
+Livo command: pickup 227 1
+Livo command: pickup 221 1
+Livo command: empty
+Livo command: pickup 255 1
+Livo command: pickup 227 1
+Livo command: pickup 233 1
+Livo command: pickup 237 1
+Livo command: pckup 237 1
+Livo command: pickup 327 1
+Livo command: pickup 237 1
+Livo command: pickup 1115 1
+Livo command: pickup 1511 1
+Livo command: pickup 946 1
+Livo command: pickup 1512 100
+Livo command: bank
