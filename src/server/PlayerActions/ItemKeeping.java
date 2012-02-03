@@ -8,21 +8,21 @@ import server.Player;
 import server.PlayerHandler;
 
 public class ItemKeeping {
-	
-	client c;
 
-	public ItemKeeping(client client) {
-			this.c = client;
-		}
+    client c;
 
-	public ItemKeeping() {
-		// TODO Auto-generated constructor stub
-	}
+    public ItemKeeping(client client) {
+        this.c = client;
+    }
+
+    public ItemKeeping() {
+        // TODO Auto-generated constructor stub
+    }
 
 
-/*
- * Losing items on death - lostmyphat
-*/
+    /*
+     * Losing items on death - lostmyphat
+    */
 
     public void keepItem1()
     {
@@ -54,7 +54,7 @@ public class ItemKeeping {
     /*
      * ^^ - lostmyphat
     */
-    
+
     public void keepItem2() {
         int highest = 0;
         for (int i = 0; i < c.playerItems.length; i++)
@@ -90,7 +90,7 @@ public class ItemKeeping {
     /*
      * ^^ - lostmyphat
     */
-    
+
     public void keepItem3()
     {
         int highest = 0;
@@ -123,11 +123,11 @@ public class ItemKeeping {
             }
         }
     }
-    
+
     /*
      * ^^ - lostmyphat
     */
-    
+
 
     public void keepItem4()
     {

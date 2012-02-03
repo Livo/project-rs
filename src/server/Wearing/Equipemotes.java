@@ -6,63 +6,63 @@ import server.client;
 
 public class Equipemotes {
 
-client c;
+    client c;
 
 
 
-public Equipemotes(client client) {
-		this.c = client;
-	}
+    public Equipemotes(client client) {
+        this.c = client;
+    }
 
-public Equipemotes() {
-	// TODO Auto-generated constructor stub
-}
+    public Equipemotes() {
+        // TODO Auto-generated constructor stub
+    }
 
-public int GetWepAnim(int id)//cleaned, everyone of them to f2p. 
+    public int GetWepAnim(int id)//cleaned, everyone of them to f2p.
     {
         if (id == -1) // unarmed
         {
             return 422;
         }
-	if ((id == 1351)) // scimitars ftype doesn't = 3
-       
-	{
-		 ////c.frame174(400, 000, 040);
+        if ((id == 1351)) // scimitars ftype doesn't = 3
+
+        {
+            ////c.frame174(400, 000, 040);
             return 451;
         }
-	if ((id == 1381 || id == 1383 || id == 1385 || id == 1387 || id == 1379) && c.FightType != 3)  // staffs
+        if ((id == 1381 || id == 1383 || id == 1385 || id == 1387 || id == 1379) && c.FightType != 3)  // staffs
         {
-	////c.frame174(395, 000, 040);
+            ////c.frame174(395, 000, 040);
             return 451;
         }
-	if ((id == 1265 || id == 1267 || id == 1259 || id == 1271 || id == 1273))  // pick axes
+        if ((id == 1265 || id == 1267 || id == 1259 || id == 1271 || id == 1273))  // pick axes
         {
-	//c.frame174(398, 000, 040);
+            //c.frame174(398, 000, 040);
             return 451;
         }
         if ((id == 1291 || id == 1321 || id == 1323 || id == 1325 || id == 1327 || id == 1329 || id == 1327 || id == 1321 || id == 1333) && c.FightType != 3) // scimitars ftype doesn't = 3
         {
-	if(c.playerRights > 1){
-	c.sM("test for slash");
-	}
-	//c.frame174(396, 000, 040);
+            if(c.playerRights > 1) {
+                c.sM("test for slash");
+            }
+            //c.frame174(396, 000, 040);
             return 451;
         }
         if ((id == 1291 || id == 1321 || id == 1323 || id == 1325 || id == 1327 || id == 1329 || id == 1327 || id == 1321 || id == 1333) && c.FightType == 3) // scimitars for fightype ==3
         {
-		//c.frame174(398, 000, 040);
-	if(c.playerRights > 1){
-		c.sM("test for stab");
-	}
+            //c.frame174(398, 000, 040);
+            if(c.playerRights > 1) {
+                c.sM("test for stab");
+            }
             return 412;
         }
         if (id == 841 || id == 843 || id == 845 || id == 849 || id == 847 || id == 853 || id == 851) // f2p bows
         {
-		//c.frame174(370, 000, 040);
+            //c.frame174(370, 000, 040);
             return 426;
         }
         if (id == 1307 || id == 1309 || id == 1311 || id == 1313 || id == 1315 || id == 1317 || id == 1319) //bronze - rune 2hs.
-        // 2 handers
+            // 2 handers
         {
             return 407;
         } else {
@@ -107,7 +107,7 @@ public int GetWepAnim(int id)//cleaned, everyone of them to f2p.
     {
         if (c.playerEquipment[c.playerShield] == 1201 || c.playerEquipment[c.playerShield] == 1540 || c.playerEquipment[c.playerShield] == 1171)//shields
         {
-           // return 0x484;
+            // return 0x484;
         }
         if (c.playerEquipment[c.playerWeapon] == 1171 || c.playerEquipment[c.playerWeapon] == 1329 || c.playerEquipment[c.playerWeapon] == 1327 || c.playerEquipment[c.playerWeapon] == 1291 || c.playerEquipment[c.playerWeapon] == 1321 || c.playerEquipment[c.playerWeapon] == 1325 || c.playerEquipment[c.playerWeapon] == 1291)//scims
         {
@@ -126,5 +126,4 @@ public int GetWepAnim(int id)//cleaned, everyone of them to f2p.
             return 424;
         }
     }
-	}
-		
+}
