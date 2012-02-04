@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -136,8 +139,19 @@ public class server implements Runnable {
         misc.println(message);
     }
 
-    public static void main(java.lang.String args[])
-    throws NullPointerException {
+    public static void main(java.lang.String args[]) {
+    	try {
+    		Class.forName("com.mysql.jdbc.Driver");
+    		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/project-rs?user=root&password=root");
+    		System.out.println("Connection successfull!");
+    	} catch(ClassNotFoundException x) {
+    		
+    	} catch (SQLException x) {
+    		System.out.println("Could not connect to the mysql database");
+    	}
+    	System.exit(0);
+    	
+    	
         try {
             File f = new File("server.ini");
             if (!f.exists()) {
@@ -300,8 +314,7 @@ public class server implements Runnable {
 
     @Override
     public void run() {
-        // setup the listener
-        try {
+    	try {
             shutdownClientHandler = false;
             clientListener = new java.net.ServerSocket(serverlistenerPort, 1,
                     null);

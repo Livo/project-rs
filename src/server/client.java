@@ -168,7 +168,7 @@ public class client extends Player implements Runnable {
         int a19 = getLevelForXP(playerXP[19]);
         int a20 = getLevelForXP(playerXP[20]);
         int a21 = getLevelForXP(playerXP[21]);
-        int b0 = getXPForLevel(a0);
+        getXPForLevel(a0);
         int b1 = getXPForLevel(a1);
         int b2 = getXPForLevel(a2);
         int b3 = getXPForLevel(a3);
@@ -398,8 +398,8 @@ public class client extends Player implements Runnable {
 
     public void appendHitToPlayer(int index, int hitDiff, boolean stillSpell) {
         try {
-            if (server.playerHandler.players[index] != null) {
-                client mage = (client) server.playerHandler.players[index];
+            if (PlayerHandler.players[index] != null) {
+                client mage = (client) PlayerHandler.players[index];
                 boolean splash = false;
                 if (!playerMage(index)) {
                     splash = true;
@@ -425,19 +425,19 @@ public class client extends Player implements Runnable {
                 if (MagicHandler.itTeleblocks && !splash) {
                     if(System.currentTimeMillis() - lastTeleblock >= 300000) {
                         mage.sM("You have been teleblocked!");
-                        server.playerHandler.players[index].lastTeleblock = System.currentTimeMillis();
+                        PlayerHandler.players[index].lastTeleblock = System.currentTimeMillis();
                     }
                 }
                 if (MagicHandler.itFreezes && !splash) {
-                    if (server.playerHandler.players[index].EntangleDelay <= 0) {
-                        server.playerHandler.players[index].lastEntangle = System.currentTimeMillis();
-                        server.playerHandler.players[index].entangleDelay = getFreezeTimer(MagicHandler.spellID);
+                    if (PlayerHandler.players[index].EntangleDelay <= 0) {
+                        PlayerHandler.players[index].lastEntangle = System.currentTimeMillis();
+                        PlayerHandler.players[index].entangleDelay = getFreezeTimer(MagicHandler.spellID);
                         mage.sM("You have been frozen!");
                         mage.toX = mage.absX;
                         mage.toY = mage.absY;
                     }
                 }
-                client player = (client) server.playerHandler.players[playerId];
+                client player = (client) PlayerHandler.players[playerId];
                 if (mage.vengon && hitDiff != 0 && !splash) {
                     player.hitDiff = (int)(hitDiff / 1.2); // Simple math, 100 divided by 1.30, and you get 76.
                     player.currentHealth -= (int)(hitDiff / 1.2);
@@ -459,13 +459,13 @@ public class client extends Player implements Runnable {
                 addSkillXP((spellXP*hitDiff), 6);
                 addSkillXP((spellXP*hitDiff / 2), 3);
                 if (!MagicHandler.itTeleblocks && !splash) {
-                    server.playerHandler.players[index].dealDamage(hitDiff);
-                    server.playerHandler.players[index].hitDiff = hitDiff;
-                    server.playerHandler.players[index].updateRequired = true;
-                    server.playerHandler.players[index].hitUpdateRequired = true;
-                    server.playerHandler.players[index].KilledBy[playerId] += hitDiff;
-                    server.playerHandler.players[index].offTimer = System.currentTimeMillis();
-                    server.playerHandler.players[index].hitID = playerId;
+                    PlayerHandler.players[index].dealDamage(hitDiff);
+                    PlayerHandler.players[index].hitDiff = hitDiff;
+                    PlayerHandler.players[index].updateRequired = true;
+                    PlayerHandler.players[index].hitUpdateRequired = true;
+                    PlayerHandler.players[index].KilledBy[playerId] += hitDiff;
+                    PlayerHandler.players[index].offTimer = System.currentTimeMillis();
+                    PlayerHandler.players[index].hitID = playerId;
                     mage.KillerId = playerId;
                 }
             }
@@ -730,7 +730,7 @@ public class client extends Player implements Runnable {
     */
 
     public void getHit(int extraDamage) {
-        client AttackingOn2 = (client) server.playerHandler.players[AttackingOn];
+        client AttackingOn2 = (client) PlayerHandler.players[AttackingOn];
         int voidmelee = 0;
         if(FullVMelee()) {
             voidmelee += 10;
@@ -772,7 +772,7 @@ public class client extends Player implements Runnable {
     */
 
     public void getHitDouble(int extraDamage) {
-        client AttackingOn2 = (client) server.playerHandler.players[AttackingOn];
+        client AttackingOn2 = (client) PlayerHandler.players[AttackingOn];
         int voidmelee = 0;
         if(FullVMelee()) {
             voidmelee += 10;
@@ -917,7 +917,7 @@ public class client extends Player implements Runnable {
     public void rangeGFX(int speed, int arrow) {
         int EnemyX = 0;
         int EnemyY = 0;
-        client AttackingOn2 = (client) server.playerHandler.players[AttackingOn];
+        client AttackingOn2 = (client) PlayerHandler.players[AttackingOn];
         if(AttackingOn2 != null) {
             EnemyX = PlayerHandler.players[AttackingOn].absX;
             EnemyY = PlayerHandler.players[AttackingOn].absY;
@@ -946,16 +946,16 @@ public class client extends Player implements Runnable {
     public boolean playerMage(int index) {
         int protmage = 0;
         int mystic = 0;
-        if (server.playerHandler.players[index] == null) {
+        if (PlayerHandler.players[index] == null) {
             return false;
         }
         if(MagePray == 5) {
             mystic = 15;
         }
-        if(server.playerHandler.players[index].ProtMage) {
+        if(PlayerHandler.players[index].ProtMage) {
             protmage = 100;
         }
-        int enemyDef = server.playerHandler.players[index].playerBonus[8] + protmage;
+        int enemyDef = PlayerHandler.players[index].playerBonus[8] + protmage;
         int myBonus = playerBonus[3] + 30 + mystic;
 
         if (misc.random(myBonus) > misc.random(enemyDef)) {
@@ -1006,7 +1006,6 @@ public class client extends Player implements Runnable {
 
     public void resetfollowers()
     {
-        PlayerHandler _tmp = server.playerHandler;
         Player aplayer[] = PlayerHandler.players;
         int j = aplayer.length;
         for(int k = 0; k < j; k++)
@@ -1334,10 +1333,10 @@ public class client extends Player implements Runnable {
     */
 
     public String GetItemName(int ItemID) {
-        for (int i = 0; i < server.itemHandler.MaxListedItems; i++) {
-            if (server.itemHandler.ItemList[i] != null) {
-                if (server.itemHandler.ItemList[i].itemId == ItemID) {
-                    return server.itemHandler.ItemList[i].itemName;
+        for (int i = 0; i < ItemHandler.MaxListedItems; i++) {
+            if (ItemHandler.ItemList[i] != null) {
+                if (ItemHandler.ItemList[i].itemId == ItemID) {
+                    return ItemHandler.ItemList[i].itemName;
                 }
                 if (ItemID == -1) {
                     return "Unarmed";
@@ -1352,7 +1351,7 @@ public class client extends Player implements Runnable {
     */
 
     public void SpecDamg(int maxDamage) {
-        for (Player p : server.playerHandler.players) {
+        for (Player p : PlayerHandler.players) {
             if(p != null) {
                 if (PlayerHandler.players[AttackingOn].deathStage < 1) {
                     int damage = misc.random(maxDamage);
@@ -1492,7 +1491,7 @@ public class client extends Player implements Runnable {
     */
 
     public void makeGlobalObject(int x, int y, int typeID, int orientation, int tileObjectType) { //Makes Global objects
-        for (Player p : server.playerHandler.players) {
+        for (Player p : PlayerHandler.players) {
             if(p != null) {
                 client person = (client)p;
                 if((person.playerName != null || person.playerName != "null")) {
@@ -2024,7 +2023,6 @@ public class client extends Player implements Runnable {
         inStream.currentOffset = 0;
 
         readPtr = writePtr = 0;
-        buffer = buffer = new byte[bufferSize];
     }
 
     public void actionReset() {
@@ -2186,18 +2184,18 @@ public class client extends Player implements Runnable {
         if (Item.itemIsNote[itemID] == true) {
             itemID = GetUnnotedItem(itemID);
         }
-        for (int i = 0; i < server.shopHandler.ShopItems.length; i++) {
-            if ((server.shopHandler.ShopItems[MyShopID][i] - 1) == itemID) {
-                server.shopHandler.ShopItemsN[MyShopID][i] += amount;
+        for (int i = 0; i < ShopHandler.ShopItems.length; i++) {
+            if ((ShopHandler.ShopItems[MyShopID][i] - 1) == itemID) {
+                ShopHandler.ShopItemsN[MyShopID][i] += amount;
                 Added = true;
             }
         }
         if (Added == false) {
-            for (int i = 0; i < server.shopHandler.ShopItems.length; i++) {
-                if (server.shopHandler.ShopItems[MyShopID][i] == 0) {
-                    server.shopHandler.ShopItems[MyShopID][i] = (itemID + 1);
-                    server.shopHandler.ShopItemsN[MyShopID][i] = amount;
-                    server.shopHandler.ShopItemsDelay[MyShopID][i] = 0;
+            for (int i = 0; i < ShopHandler.ShopItems.length; i++) {
+                if (ShopHandler.ShopItems[MyShopID][i] == 0) {
+                    ShopHandler.ShopItems[MyShopID][i] = (itemID + 1);
+                    ShopHandler.ShopItemsN[MyShopID][i] = amount;
+                    ShopHandler.ShopItemsDelay[MyShopID][i] = 0;
                     break;
                 }
             }
@@ -2334,7 +2332,7 @@ public class client extends Player implements Runnable {
     }
     // pk: 2726 9193
     private boolean Attack() {
-        client AttackingOn2 = (client) server.playerHandler.players[AttackingOn];
+        client AttackingOn2 = (client) PlayerHandler.players[AttackingOn];
         int EnemyX = PlayerHandler.players[AttackingOn].absX;
         int EnemyY = PlayerHandler.players[AttackingOn].absY;
         if(hasKnife()) {
@@ -2349,7 +2347,7 @@ public class client extends Player implements Runnable {
             return false;
         }
         if (!(AttackingOn > 0)
-                || !(AttackingOn < server.playerHandler.players.length)) {
+                || !(AttackingOn < PlayerHandler.players.length)) {
             ResetAttack();
             return false;
         }
@@ -2397,29 +2395,24 @@ public class client extends Player implements Runnable {
             }
         }
         int EnemyHP = PlayerHandler.players[AttackingOn].currentHealth;
-        int EnemyHPExp = PlayerHandler.players[AttackingOn].playerXP[playerHitpoints];
         int[] arrowIds = { 882, 884, 886, 888, 890, 892, 78 };
         int[] arrowGfx = { 10, 9, 11, 12, 13, 15, 16 };
         int[] staffs = {1381, 1383, 1385, 1387, 4675};
         faceNPC(32768 + AttackingOn);
         updateRequired = true;
         appearanceUpdateRequired = true;
-        int arrowgfx = 10;
         for (int i1 = 0; i1 < arrowIds.length; i1++) {
             if (playerEquipment[playerArrows] == arrowIds[i1]) {
-                arrowgfx = arrowGfx[i1];
             }
         }
         if(hasCrystalBow()) {
-            arrowgfx = 249;
         }
         for (int element : staffs) {
             if ((playerEquipment[playerWeapon] == element)
                     && autocasting && autocastID > 0 && (isInPitGame() && !AttackingOn2.isInPitRoom() || isInWilderness(absX, absY, 1) == true && AttackingOn2.isInWilderness(AttackingOn2.absX, AttackingOn2.absY, 1) == true)) {
-                int playerTargetX = server.playerHandler.players[AttackingOn].absX;
-                int playerTargetY = server.playerHandler.players[AttackingOn].absY;
-                int playerTargetCombat = server.playerHandler.players[AttackingOn].combat;
-                int playerTargetHealth = server.playerHandler.players[AttackingOn].playerLevel[playerHitpoints];
+                int playerTargetX = PlayerHandler.players[AttackingOn].absX;
+                int playerTargetY = PlayerHandler.players[AttackingOn].absY;
+                int playerTargetHealth = PlayerHandler.players[AttackingOn].playerLevel[playerHitpoints];
                 if (System.currentTimeMillis() - lastAttack < 4000) {
                     //sM("You must wait 4 seconds before casting this kind of spell again");
                     return false;
@@ -2475,7 +2468,7 @@ public class client extends Player implements Runnable {
         } else {
             hitDiff = 0;
         }
-        long thisTime = System.currentTimeMillis();
+        System.currentTimeMillis();
         if (UseBow && playerEquipment[playerWeapon] == 4734) {
             //CalculateRange();
             hitDiff = misc.random(maxRangeHit());
@@ -2668,7 +2661,7 @@ public class client extends Player implements Runnable {
         if (GoodDistance(EnemyX, EnemyY, absX, absY, 1) == true && !UseBow && !UseCrossBow && !UseRing) {
             inCombat = true;
             lastCombat = System.currentTimeMillis();
-            if (isInPitGame() && !AttackingOn2.isInPitRoom() || isInWilderness(absX, absY, 1) == true && AttackingOn2.isInWilderness(AttackingOn2.absX, AttackingOn2.absY, 1) == true ||  matchId == handler.players[AttackingOn].matchId && matchId >= 0) {
+            if (isInPitGame() && !AttackingOn2.isInPitRoom() || isInWilderness(absX, absY, 1) == true && AttackingOn2.isInWilderness(AttackingOn2.absX, AttackingOn2.absY, 1) == true ||  matchId == PlayerHandler.players[AttackingOn].matchId && matchId >= 0) {
                 if (PlayerHandler.players[AttackingOn].deathStage > 0) {
                     ResetAttack();
                 } else {
@@ -2694,7 +2687,7 @@ public class client extends Player implements Runnable {
                         faceNPC(32768 + AttackingOn);
                         return false;
                     }
-                    client player = (client) server.playerHandler.players[playerId];
+                    client player = (client) PlayerHandler.players[playerId];
                     if (AttackingOn2.vengon && hitDiff != 0) {
                         player.hitDiff = (int)(hitDiff / 1.2);
                         player.currentHealth -= (int)(hitDiff / 1.2);
@@ -2942,7 +2935,7 @@ public class client extends Player implements Runnable {
                 addSkillXP((int)(TotalExp), playerHitpoints);
                 attackTimer = 7;
                 lastAttack = System.currentTimeMillis();
-                client player = (client) server.playerHandler.players[playerId];
+                client player = (client) PlayerHandler.players[playerId];
                 if (AttackingOn2.vengon && hitDiff != 0 ) {
                     player.hitDiff = (int)(hitDiff / 1.2);
                     player.currentHealth -= (int)(hitDiff / 1.2);
@@ -3155,14 +3148,11 @@ public class client extends Player implements Runnable {
             ResetAttackNPC();
             return false;
         }
-        int arrowgfx = 10;
         for (int i1 = 0; i1 < arrowIds.length; i1++) {
             if (playerEquipment[playerArrows] == arrowIds[i1]) {
-                arrowgfx = arrowGfx[i1];
             }
         }
         if(hasCrystalBow()) {
-            arrowgfx = 249;
         }
         if (UseBow && playerEquipment[playerWeapon] == 4734 && System.currentTimeMillis() - lastAction > actionInterval) {
             //CalculateRange();
@@ -3475,7 +3465,7 @@ public class client extends Player implements Runnable {
     public void attackPlayersWithin(int gfx, int maxDamage, int range) {
         // for (Player p : server.playerHandler.players) {
         // Linux (java 1.4.2-compatible) change - Devolution
-        for (Player p : server.playerHandler.players) {
+        for (Player p : PlayerHandler.players) {
             if (p != null) {
                 client person = (client) p;
 
@@ -3501,7 +3491,7 @@ public class client extends Player implements Runnable {
     public void attackPlayersWithin2(int gfx, int maxDamage, int range) {
         // for (Player p : server.playerHandler.players) {
         // Linux (java 1.4.2-compatible) change - Devolution
-        for (Player p : server.playerHandler.players) {
+        for (Player p : PlayerHandler.players) {
             if (p != null) {
                 client person = (client) p;
 
@@ -3536,14 +3526,11 @@ public class client extends Player implements Runnable {
     public boolean buyItem(int itemID, int fromSlot, int amount) {
         if (amount > 0
                 && itemID
-                == (server.shopHandler.ShopItems[MyShopID][fromSlot] - 1)) {
-            if (amount > server.shopHandler.ShopItemsN[MyShopID][fromSlot]) {
-                amount = server.shopHandler.ShopItemsN[MyShopID][fromSlot];
+                == (ShopHandler.ShopItems[MyShopID][fromSlot] - 1)) {
+            if (amount > ShopHandler.ShopItemsN[MyShopID][fromSlot]) {
+                amount = ShopHandler.ShopItemsN[MyShopID][fromSlot];
             }
-            double ShopValue;
-            double TotPrice;
             int TotPrice2;
-            int Overstock;
             int Slot = 0;
             int Slot2 = 0;
             int Slot3 = 0;
@@ -3638,11 +3625,11 @@ public class client extends Player implements Runnable {
 
                             deleteItem(995, GetItemSlot(995), TotPrice2);
                             addItem(itemID, 1);
-                            server.shopHandler.ShopItemsN[MyShopID][fromSlot] -= 1;
-                            server.shopHandler.ShopItemsDelay[MyShopID][fromSlot] = 0;
+                            ShopHandler.ShopItemsN[MyShopID][fromSlot] -= 1;
+                            ShopHandler.ShopItemsDelay[MyShopID][fromSlot] = 0;
                             if ((fromSlot + 1)
-                                    > server.shopHandler.ShopItemsStandard[MyShopID]) {
-                                server.shopHandler.ShopItems[MyShopID][fromSlot] = 0;
+                                    > ShopHandler.ShopItemsStandard[MyShopID]) {
+                                ShopHandler.ShopItems[MyShopID][fromSlot] = 0;
                             }
                         } else {
                             sM("Not enough space in your inventory.");
@@ -3657,11 +3644,11 @@ public class client extends Player implements Runnable {
                         if (freeSlots() > 0) {
                             deleteItem(6529, GetItemSlot(6529), TotPrice2);
                             addItem(itemID, 1);
-                            server.shopHandler.ShopItemsN[MyShopID][fromSlot] -= 1;
-                            server.shopHandler.ShopItemsDelay[MyShopID][fromSlot] = 0;
+                            ShopHandler.ShopItemsN[MyShopID][fromSlot] -= 1;
+                            ShopHandler.ShopItemsDelay[MyShopID][fromSlot] = 0;
                             if ((fromSlot + 1)
-                                    > server.shopHandler.ShopItemsStandard[MyShopID]) {
-                                server.shopHandler.ShopItems[MyShopID][fromSlot] = 0;
+                                    > ShopHandler.ShopItemsStandard[MyShopID]) {
+                                ShopHandler.ShopItems[MyShopID][fromSlot] = 0;
                             }
                         } else {
                             sM("Not enough space in your inventory.");
@@ -3676,11 +3663,11 @@ public class client extends Player implements Runnable {
                         if (freeSlots() > 0) {
                             assaultKills -= TotPrice2;
                             addItem(itemID, 1);
-                            server.shopHandler.ShopItemsN[MyShopID][fromSlot] -= 1;
-                            server.shopHandler.ShopItemsDelay[MyShopID][fromSlot] = 0;
+                            ShopHandler.ShopItemsN[MyShopID][fromSlot] -= 1;
+                            ShopHandler.ShopItemsDelay[MyShopID][fromSlot] = 0;
                             if ((fromSlot + 1)
-                                    > server.shopHandler.ShopItemsStandard[MyShopID]) {
-                                server.shopHandler.ShopItems[MyShopID][fromSlot] = 0;
+                                    > ShopHandler.ShopItemsStandard[MyShopID]) {
+                                ShopHandler.ShopItems[MyShopID][fromSlot] = 0;
                             }
                         } else {
                             sM("Not enough space in your inventory.");
@@ -3972,20 +3959,15 @@ public class client extends Player implements Runnable {
             int i2 = 1;
             do
             {
-                PlayerHandler _tmp = server.playerHandler;
                 if(i2 >= 650)
                     break label0;
-                PlayerHandler _tmp1 = server.playerHandler;
                 if(PlayerHandler.players[i2] != null)
                 {
-                    PlayerHandler _tmp2 = server.playerHandler;
                     client client1 = (client)PlayerHandler.players[i2];
                     if(client1.WithinDistance(absX, absY, client1.absX, client1.absY, 60) && client1.heightLevel == heightLevel)
                     {
-                        PlayerHandler _tmp3 = server.playerHandler;
                         if(PlayerHandler.players[i2] != null)
                         {
-                            PlayerHandler _tmp4 = server.playerHandler;
                             if(!PlayerHandler.players[i2].disconnected)
                             {
                                 client1.outStream.createFrame(85);
@@ -4020,20 +4002,15 @@ public class client extends Player implements Runnable {
             int i2 = 1;
             do
             {
-                PlayerHandler _tmp = server.playerHandler;
                 if(i2 >= 275)
                     break label0;
-                PlayerHandler _tmp1 = server.playerHandler;
                 if(PlayerHandler.players[i2] != null)
                 {
-                    PlayerHandler _tmp2 = server.playerHandler;
                     client client1 = (client)PlayerHandler.players[i2];
                     if(client1.WithinDistance(absX, absY, client1.absX, client1.absY, 60) && client1.heightLevel == heightLevel)
                     {
-                        PlayerHandler _tmp3 = server.playerHandler;
                         if(PlayerHandler.players[i2] != null)
                         {
-                            PlayerHandler _tmp4 = server.playerHandler;
                             if(!PlayerHandler.players[i2].disconnected)
                             {
                                 client1.outStream.createFrame(85);
@@ -4147,10 +4124,10 @@ public class client extends Player implements Runnable {
         }
         if (command.startsWith("kick") && playerRights > 0) {
             client noob = null;
-            for(int i = 0; i < server.playerHandler.players.length; i++) {
-                if(server.playerHandler.players[i] != null) {
-                    if(command.substring(5).equalsIgnoreCase(server.playerHandler.players[i].playerName)) {
-                        noob = (client)server.playerHandler.players[i];
+            for(int i = 0; i < PlayerHandler.players.length; i++) {
+                if(PlayerHandler.players[i] != null) {
+                    if(command.substring(5).equalsIgnoreCase(PlayerHandler.players[i].playerName)) {
+                        noob = (client)PlayerHandler.players[i];
                         noob.disconnected = true;
                         noob.logoutButton = true;
                     }
@@ -4159,7 +4136,7 @@ public class client extends Player implements Runnable {
         }
 
         if(command.equalsIgnoreCase("npcreset") && playerRights > 1) {
-            for (int i = 0; i < server.npcHandler.maxNPCs; i++) {
+            for (int i = 0; i < NPCHandler.maxNPCs; i++) {
                 if (server.npcHandler.npcs[i] != null) {
                     if(server.npcHandler.npcs[i].npcType == 2627 || server.npcHandler.npcs[i].npcType == 2630 || server.npcHandler.npcs[i].npcType == 2631 || server.npcHandler.npcs[i].npcType == 2741 || server.npcHandler.npcs[i].npcType == 2743 || server.npcHandler.npcs[i].npcType == 2745 || server.npcHandler.npcs[i].npcType == 2746 || server.npcHandler.npcs[i].npcType == 2738 || server.npcHandler.npcs[i].npcType == 3777 || server.npcHandler.npcs[i].npcType == 3778 || server.npcHandler.npcs[i].npcType == 3779 || server.npcHandler.npcs[i].npcType == 3780) {
                         server.npcHandler.npcs[i].IsDead = false;
@@ -4209,7 +4186,7 @@ public class client extends Player implements Runnable {
                 int otherPIndex = PlayerHandler.getPlayerID(otherPName);
 
                 if (otherPIndex != -1) {
-                    client p = (client) server.playerHandler.players[otherPIndex];
+                    client p = (client) PlayerHandler.players[otherPIndex];
 
                     writeLog(p.playerName, "bans");
                     p.disconnected = true;
@@ -4227,7 +4204,7 @@ public class client extends Player implements Runnable {
                 int otherPIndex = PlayerHandler.getPlayerID(otherPName);
 
                 if (otherPIndex != -1) {
-                    client p = (client) server.playerHandler.players[otherPIndex];
+                    client p = (client) PlayerHandler.players[otherPIndex];
 
                     p.writeLog(p.playerLastConnect, "ipbans");
                     p.disconnected = true;
@@ -4245,7 +4222,7 @@ public class client extends Player implements Runnable {
                 int otherPIndex = PlayerHandler.getPlayerID(otherPName);
 
                 if (otherPIndex != -1) {
-                    client p = (client) server.playerHandler.players[otherPIndex];
+                    client p = (client) PlayerHandler.players[otherPIndex];
 
                     p.muted = true;
                     writeLog(p.playerName, "mutes");
@@ -4263,7 +4240,7 @@ public class client extends Player implements Runnable {
                 int otherPIndex = PlayerHandler.getPlayerID(otherPName);
 
                 if (otherPIndex != -1) {
-                    client p = (client) server.playerHandler.players[otherPIndex];
+                    client p = (client) PlayerHandler.players[otherPIndex];
                     writeLog(p.connectedFrom, "mutes2");
                     p.muted = true;
                     p.sM(
@@ -4283,7 +4260,7 @@ public class client extends Player implements Runnable {
                 int otherPIndex = PlayerHandler.getPlayerID(otherPName);
 
                 if (otherPIndex != -1) {
-                    client p = (client) server.playerHandler.players[otherPIndex];
+                    client p = (client) PlayerHandler.players[otherPIndex];
                     {
                         p.toX = absX;
                         p.toY = absY;
@@ -4307,7 +4284,7 @@ public class client extends Player implements Runnable {
                 int otherPIndex = PlayerHandler.getPlayerID(otherPName);
                 if(otherPIndex != -1)
                 {
-                    client p = (client) server.playerHandler.players[otherPIndex];
+                    client p = (client) PlayerHandler.players[otherPIndex];
                     {
                         toX = p.absX;
                         toY = p.absY;
@@ -4539,14 +4516,6 @@ public class client extends Player implements Runnable {
                                + Math.pow(absY - pointY, 2));
     }
     public void dropItem(int droppedItem, int slot) {
-        // misc.printlnTag("droppeditem ["+playerItems[slot]+"] which is
-        // ["+(droppedItem+1)+"]");
-        boolean a = true;
-
-
-
-
-
         if(playerName == null)
             return;
         if(droppedItem == 4708) {
@@ -4895,7 +4864,7 @@ public class client extends Player implements Runnable {
         } else {
             boolean online = false;
             // int duration = misc.times[rule];
-            for (int i = 0; i < handler.players.length; i++) {
+            for (int i = 0; i < PlayerHandler.players.length; i++) {
                 client other = getClient(i);
                 if (!validClient(i))
                     continue;
@@ -4927,10 +4896,10 @@ public class client extends Player implements Runnable {
         for (int i = 0; i < playerEquipment.length; i++) {
             if (playerEquipment[i] > -1) {
                 for (int j = 0; j < 9999; j++) {
-                    if (server.itemHandler.ItemList[j] != null) {
-                        if (server.itemHandler.ItemList[j].itemId == playerEquipment[i]) {
+                    if (ItemHandler.ItemList[j] != null) {
+                        if (ItemHandler.ItemList[j].itemId == playerEquipment[i]) {
                             for (int k = 0; k < playerBonus.length; k++) {
-                                playerBonus[k] += server.itemHandler.ItemList[j].Bonuses[k];
+                                playerBonus[k] += ItemHandler.ItemList[j].Bonuses[k];
                             }
                             break;
                         }
@@ -4963,16 +4932,16 @@ public class client extends Player implements Runnable {
 
 
     public client getClient(int index) {
-        return ((client) handler.players[index]);
+        return ((client) PlayerHandler.players[index]);
     }
 
     /* ITEMS */
 
     public String getItemName(int ItemID) {
-        for (int i = 0; i < server.itemHandler.MaxListedItems; i++) {
-            if (server.itemHandler.ItemList[i] != null) {
-                if (server.itemHandler.ItemList[i].itemId == ItemID) {
-                    return server.itemHandler.ItemList[i].itemName;
+        for (int i = 0; i < ItemHandler.MaxListedItems; i++) {
+            if (ItemHandler.ItemList[i] != null) {
+                if (ItemHandler.ItemList[i].itemId == ItemID) {
+                    return ItemHandler.ItemList[i].itemName;
                 }
             }
         }
@@ -4981,13 +4950,12 @@ public class client extends Player implements Runnable {
 
     public double GetItemShopValue(int ItemID, int Type, int fromSlot) {
         double ShopValue = 1;
-        double Overstock = 0;
         double TotPrice = 0;
 
-        for (int i = 0; i < server.itemHandler.MaxListedItems; i++) {
-            if (server.itemHandler.ItemList[i] != null) {
-                if (server.itemHandler.ItemList[i].itemId == ItemID) {
-                    ShopValue = server.itemHandler.ItemList[i].ShopValue;
+        for (int i = 0; i < ItemHandler.MaxListedItems; i++) {
+            if (ItemHandler.ItemList[i] != null) {
+                if (ItemHandler.ItemList[i].itemId == ItemID) {
+                    ShopValue = ItemHandler.ItemList[i].ShopValue;
                 }
             }
         }
@@ -5004,7 +4972,7 @@ public class client extends Player implements Runnable {
          * 0) { // less then default -> exspensive TotPrice += ((ShopValue /
          * 100) * (1.26875 * Overstock)); }
          */
-        if (server.shopHandler.ShopBModifier[MyShopID] == 1) {
+        if (ShopHandler.ShopBModifier[MyShopID] == 1) {
             TotPrice *= 1; // 25% more expensive (general stores only)
             if (Type == 1) {
                 TotPrice *= 0.4; // general store buys item at 40% of its own
@@ -5018,13 +4986,12 @@ public class client extends Player implements Runnable {
     }
     public double GetItemValue(int ItemID) {
         double ShopValue = 1;
-        double Overstock = 0;
         double TotPrice = 0;
 
-        for (int i = 0; i < server.itemHandler.MaxListedItems; i++) {
-            if (server.itemHandler.ItemList[i] != null) {
-                if (server.itemHandler.ItemList[i].itemId == ItemID) {
-                    ShopValue = server.itemHandler.ItemList[i].ShopValue;
+        for (int i = 0; i < ItemHandler.MaxListedItems; i++) {
+            if (ItemHandler.ItemList[i] != null) {
+                if (ItemHandler.ItemList[i].itemId == ItemID) {
+                    ShopValue = ItemHandler.ItemList[i].ShopValue;
                 }
             }
         }
@@ -5074,7 +5041,7 @@ public class client extends Player implements Runnable {
     }
 
     public int GetNPCID(int coordX, int coordY) {
-        for (int i = 0; i < server.npcHandler.maxNPCSpawns; i++) {
+        for (int i = 0; i < NPCHandler.maxNPCSpawns; i++) {
             if (server.npcHandler.npcs[i] != null) {
                 if ((server.npcHandler.npcs[i].absX == coordX)
                         && (server.npcHandler.npcs[i].absY == coordY)) {
@@ -5086,7 +5053,7 @@ public class client extends Player implements Runnable {
     }
 
     public String GetNpcName(int NpcID) {
-        for (int i = 0; i < server.npcHandler.maxListedNPCs; i++) {
+        for (int i = 0; i < NPCHandler.maxListedNPCs; i++) {
             if (server.npcHandler.NpcList[i] != null) {
                 if (server.npcHandler.NpcList[i].npcId == NpcID) {
                     return server.npcHandler.NpcList[i].npcName;
@@ -5102,19 +5069,19 @@ public class client extends Player implements Runnable {
         int NewID = 0;
         String NotedName = "";
 
-        for (int i = 0; i < server.itemHandler.MaxListedItems; i++) {
-            if (server.itemHandler.ItemList[i] != null) {
-                if (server.itemHandler.ItemList[i].itemId == ItemID) {
-                    NotedName = server.itemHandler.ItemList[i].itemName;
+        for (int i = 0; i < ItemHandler.MaxListedItems; i++) {
+            if (ItemHandler.ItemList[i] != null) {
+                if (ItemHandler.ItemList[i].itemId == ItemID) {
+                    NotedName = ItemHandler.ItemList[i].itemName;
                 }
             }
         }
-        for (int i = 0; i < server.itemHandler.MaxListedItems; i++) {
-            if (server.itemHandler.ItemList[i] != null) {
-                if (server.itemHandler.ItemList[i].itemName == NotedName) {
-                    if (server.itemHandler.ItemList[i].itemDescription
+        for (int i = 0; i < ItemHandler.MaxListedItems; i++) {
+            if (ItemHandler.ItemList[i] != null) {
+                if (ItemHandler.ItemList[i].itemName == NotedName) {
+                    if (ItemHandler.ItemList[i].itemDescription
                             .startsWith("Swap this note at any bank for a") == false) {
-                        NewID = server.itemHandler.ItemList[i].itemId;
+                        NewID = ItemHandler.ItemList[i].itemId;
                         break;
                     }
                 }
@@ -5274,11 +5241,6 @@ public class client extends Player implements Runnable {
 
         int dots = 0;
         int start[] = { 0, 0, 0, 0 };
-        int IPPart1 = 127;
-        int IPPart2 = 0;
-        int IPPart3 = 0;
-        int IPPart4 = 1;
-
         if (playerLastConnect.length() < 7) {
             playerLastConnect = connectedFrom;
         }
@@ -5295,13 +5257,13 @@ public class client extends Player implements Runnable {
                 }
             }
             if (dots == 3) {
-                IPPart1 = Integer.parseInt(playerLastConnect.substring(0,
+                Integer.parseInt(playerLastConnect.substring(0,
                                            start[0]));
-                IPPart2 = Integer.parseInt(playerLastConnect.substring(
+                Integer.parseInt(playerLastConnect.substring(
                                                (start[0] + 1), start[1]));
-                IPPart3 = Integer.parseInt(playerLastConnect.substring(
+                Integer.parseInt(playerLastConnect.substring(
                                                (start[1] + 1), start[2]));
-                IPPart4 = Integer.parseInt(playerLastConnect
+                Integer.parseInt(playerLastConnect
                                            .substring((start[2] + 1)));
             }
         } else {
@@ -5318,13 +5280,13 @@ public class client extends Player implements Runnable {
             }
             if (dots == 4) {
                 try {
-                    IPPart1 = Integer.parseInt(playerLastConnect.substring(0,
+                    Integer.parseInt(playerLastConnect.substring(0,
                                                start[0]));
-                    IPPart2 = Integer.parseInt(playerLastConnect.substring(
+                    Integer.parseInt(playerLastConnect.substring(
                                                    (start[0] + 1), start[1]));
-                    IPPart3 = Integer.parseInt(playerLastConnect.substring(
+                    Integer.parseInt(playerLastConnect.substring(
                                                    (start[1] + 1), start[2]));
-                    IPPart4 = Integer.parseInt(playerLastConnect.substring(
+                    Integer.parseInt(playerLastConnect.substring(
                                                    (start[2] + 1), (start[3])));
                 } catch (NumberFormatException e) {
                 }
@@ -5434,7 +5396,7 @@ public class client extends Player implements Runnable {
         sendFrame126("", 6071);
         SendWeapon(-1, "Unarmed");
 
-        handler.updatePlayer(this, outStream);
+        PlayerHandler.updatePlayer(this, outStream);
         handler.updateNPC(this, outStream);
         setEquipment(playerEquipment[playerHat], playerEquipmentN[playerHat],
                      playerHat);
@@ -5471,14 +5433,14 @@ public class client extends Player implements Runnable {
 
         for (long element : friends) {
             if (element != 0) {
-                for (int i2 = 1; i2 < handler.maxPlayers; i2++) {
-                    if ((handler.players[i2] != null)
-                            && handler.players[i2].isActive
+                for (int i2 = 1; i2 < PlayerHandler.maxPlayers; i2++) {
+                    if ((PlayerHandler.players[i2] != null)
+                            && PlayerHandler.players[i2].isActive
                             && (misc
-                                .playerNameToInt64(handler.players[i2].playerName) == element)) {
+                                .playerNameToInt64(PlayerHandler.players[i2].playerName) == element)) {
                         if ((playerRights >= 2)
-                                || (handler.players[i2].Privatechat == 0)
-                                || ((handler.players[i2].Privatechat == 1) && handler.players[i2]
+                                || (PlayerHandler.players[i2].Privatechat == 0)
+                                || ((PlayerHandler.players[i2].Privatechat == 1) && PlayerHandler.players[i2]
                                     .isinpm(misc
                                             .playerNameToInt64(playerName)))) {
                             loadpm(element, GetWorld(i2));
@@ -5493,10 +5455,10 @@ public class client extends Player implements Runnable {
                 pmloaded = false;
             }
         }
-        for (int i1 = 1; i1 < handler.maxPlayers; i1++) {
-            if ((handler.players[i1] != null)
-                    && (handler.players[i1].isActive == true)) {
-                handler.players[i1].pmupdate(playerId, GetWorld(playerId));
+        for (int i1 = 1; i1 < PlayerHandler.maxPlayers; i1++) {
+            if ((PlayerHandler.players[i1] != null)
+                    && (PlayerHandler.players[i1].isActive == true)) {
+                PlayerHandler.players[i1].pmupdate(playerId, GetWorld(playerId));
             }
         }
         server.textHandler.startText(playerId);
@@ -5887,7 +5849,7 @@ public class client extends Player implements Runnable {
         double d1 = playerLevel[playerRanged];
         d += 1.399D + d1 * 0.00125D;
         d += d1 * 0.11D;
-        client AttackingOn2 = (client) server.playerHandler.players[AttackingOn];
+        client AttackingOn2 = (client) PlayerHandler.players[AttackingOn];
         if (AttackingOn2 != null) {
             if(hasCrystalBow())
             {
@@ -6031,12 +5993,9 @@ public class client extends Player implements Runnable {
     }
     public int MICheckPickAxe() {
         int Hand;
-        int Shield;
-        int Bag;
         int PickAxe;
 
         Hand = playerEquipment[playerWeapon];
-        Shield = playerEquipment[playerShield];
         PickAxe = 0;
         switch (Hand) {
         case 1265:
@@ -6078,7 +6037,6 @@ public class client extends Player implements Runnable {
     /* MINING */
     public boolean mining() {
         int MIPickAxe = 0;
-        int RndGems = 50;
         if (IsMining == true && false) {
             MIPickAxe = 1; // If Mining -> Go trough loop, passby
             // MICheckPickAxe to prevent originalweapon loss, 1
@@ -6102,7 +6060,6 @@ public class client extends Player implements Runnable {
                                 || (IsItemInBag(1708) == true)
                                 || (IsItemInBag(1710) == true)
                                 || (IsItemInBag(1712) == true)) {
-                            RndGems /= 2;
                         }
                         addSkillXP(mining[2], playerMining);
                         addItem(mining[4], 1);
@@ -6179,7 +6136,7 @@ public class client extends Player implements Runnable {
         int[] soon = { 14779, 14787, 14783, 14791, 14780, 14788, 14784, 14792 };
         String[] dhide = { "Green", "Red", "Blue", "Black" };
         String[] cost = { "1,000gp", "5,000gp", "2,000gp", "10,000gp" };
-        int type = 0, i2 = 0;
+        int type = 0;
         for (int i = 0; i < soon.length; i++) {
             if (type == 0) {
                 sendQuest(dhide[(int) (i / 2)], soon[i]);
@@ -6227,7 +6184,7 @@ public class client extends Player implements Runnable {
 
 
     public void openUpShop(int ShopID) {
-        sendFrame126(server.shopHandler.ShopName[ShopID], 3901);
+        sendFrame126(ShopHandler.ShopName[ShopID], 3901);
         sendFrame248(3824, 3822);
         resetItems(3823);
         resetShop(ShopID);
@@ -6406,13 +6363,13 @@ public class client extends Player implements Runnable {
     }
 
     public void pmupdate(int pmid, int world) {
-        if ((handler.players[pmid] == null)
-                || (handler.players[pmid].playerName == null)) {
+        if ((PlayerHandler.players[pmid] == null)
+                || (PlayerHandler.players[pmid].playerName == null)) {
             return;
         }
-        long l = misc.playerNameToInt64(handler.players[pmid].playerName);
+        long l = misc.playerNameToInt64(PlayerHandler.players[pmid].playerName);
 
-        if (handler.players[pmid].Privatechat == 0) {
+        if (PlayerHandler.players[pmid].Privatechat == 0) {
             for (long element : friends) {
                 if (element != 0) {
                     if (l == element) {
@@ -6421,11 +6378,11 @@ public class client extends Player implements Runnable {
                     }
                 }
             }
-        } else if (handler.players[pmid].Privatechat == 1) {
+        } else if (PlayerHandler.players[pmid].Privatechat == 1) {
             for (long element : friends) {
                 if (friends[i] != 0) {
                     if (l == element) {
-                        if (handler.players[pmid].isinpm(misc
+                        if (PlayerHandler.players[pmid].isinpm(misc
                                                          .playerNameToInt64(playerName))
                                 && (playerRights > 2)) {
                             loadpm(l, world);
@@ -6437,7 +6394,7 @@ public class client extends Player implements Runnable {
                     }
                 }
             }
-        } else if (handler.players[pmid].Privatechat == 2) {
+        } else if (PlayerHandler.players[pmid].Privatechat == 2) {
             for (long element : friends) {
                 if (friends[i] != 0) {
                     if ((l == element) && (playerRights < 2)) {
@@ -6490,7 +6447,6 @@ public class client extends Player implements Runnable {
 
     public void changeText126(String s, int i)
     {
-        PlayerHandler _tmp = server.playerHandler;
         if(PlayerHandler.players[playerId] == null || disconnected || in == null || out == null)
         {
             return;
@@ -6723,7 +6679,7 @@ public class client extends Player implements Runnable {
             lastArrow = System.currentTimeMillis();
             arrow2 = false;
             if(AttackingOn > 0 && isInWilderness(absX, absY, 1) == true && getClient(AttackingOn).isInWilderness(getClient(AttackingOn).absX, getClient(AttackingOn).absY, 1) == true) {
-                client AttackingOn2 = (client) server.playerHandler.players[AttackingOn];
+                client AttackingOn2 = (client) PlayerHandler.players[AttackingOn];
                 if(AttackingOn2 != null) {
                     hitDiff = misc.random(maxRangeHit());
                     PlayerHandler.players[AttackingOn].hitDiff = hitDiff;
@@ -7211,7 +7167,7 @@ public class client extends Player implements Runnable {
         return true;
     }
     public boolean ResetAttackNPC() {
-        if ((attacknpc > -1) && (attacknpc < server.npcHandler.maxNPCSpawns)) {
+        if ((attacknpc > -1) && (attacknpc < NPCHandler.maxNPCSpawns)) {
             server.npcHandler.npcs[attacknpc].IsUnderAttack = false;
             server.npcHandler.npcs[attacknpc].IsUnderAttack = false;
             server.npcHandler.npcs[attacknpc].StartKilling = 0;
@@ -7341,27 +7297,27 @@ public class client extends Player implements Runnable {
     public void resetShop(int ShopID) {
         int TotalItems = 0;
 
-        for (int i = 0; i < server.shopHandler.MaxShopItems; i++) {
-            if (server.shopHandler.ShopItems[ShopID][i] > 0) {
+        for (int i = 0; i < ShopHandler.MaxShopItems; i++) {
+            if (ShopHandler.ShopItems[ShopID][i] > 0) {
                 TotalItems++;
             }
         }
-        if (TotalItems > server.shopHandler.MaxShopItems) {
-            TotalItems = server.shopHandler.MaxShopItems;
+        if (TotalItems > ShopHandler.MaxShopItems) {
+            TotalItems = ShopHandler.MaxShopItems;
         }
         outStream.createFrameVarSizeWord(53);
         outStream.writeWord(3900);
         outStream.writeWord(TotalItems);
         int TotalCount = 0;
 
-        for (int i = 0; i < server.shopHandler.ShopItems.length; i++) {
-            if ((server.shopHandler.ShopItems[ShopID][i] > 0)
-                    || (i <= server.shopHandler.ShopItemsStandard[ShopID])) {
-                if (server.shopHandler.ShopItemsN[ShopID][i] > 254) {
+        for (int i = 0; i < ShopHandler.ShopItems.length; i++) {
+            if ((ShopHandler.ShopItems[ShopID][i] > 0)
+                    || (i <= ShopHandler.ShopItemsStandard[ShopID])) {
+                if (ShopHandler.ShopItemsN[ShopID][i] > 254) {
                     outStream.writeByte(255); // item's stack count. if over
                     // 254, write byte 255
                     outStream
-                    .writeDWord_v2(server.shopHandler.ShopItemsN[ShopID][i]); // and
+                    .writeDWord_v2(ShopHandler.ShopItemsN[ShopID][i]); // and
                     // then
                     // the
                     // real
@@ -7370,14 +7326,14 @@ public class client extends Player implements Runnable {
                     // writeDWord_v2
                 } else {
                     outStream
-                    .writeByte(server.shopHandler.ShopItemsN[ShopID][i]);
+                    .writeByte(ShopHandler.ShopItemsN[ShopID][i]);
                 }
-                if ((server.shopHandler.ShopItems[ShopID][i] > 20000)
-                        || (server.shopHandler.ShopItems[ShopID][i] < 0)) {
-                    server.shopHandler.ShopItems[ShopID][i] = 20000;
+                if ((ShopHandler.ShopItems[ShopID][i] > 20000)
+                        || (ShopHandler.ShopItems[ShopID][i] < 0)) {
+                    ShopHandler.ShopItems[ShopID][i] = 20000;
                 }
                 outStream
-                .writeWordBigEndianA(server.shopHandler.ShopItems[ShopID][i]); // item
+                .writeWordBigEndianA(ShopHandler.ShopItems[ShopID][i]); // item
                 // id
                 TotalCount++;
             }
@@ -7457,7 +7413,7 @@ public class client extends Player implements Runnable {
         EntangleDelay = 10;
     }
     public void nearNPC() {
-        for (int i = 0; i < server.npcHandler.maxNPCs; i++) {
+        for (int i = 0; i < NPCHandler.maxNPCs; i++) {
             if (server.npcHandler.npcs[i] != null && server.npcHandler.npcs[i].npcType == 1505) {
                 if(GoodDistance(server.npcHandler.npcs[i].absX, server.npcHandler.npcs[i].absY, absX, absY, 1) && npcId != 1463) {
                     server.npcHandler.npcs[i].animNumber = 1402;
@@ -7490,10 +7446,7 @@ public class client extends Player implements Runnable {
                 disconnected = true;
                 return;
             }
-            // this is part of the usename. Maybe it's used as a hash to select
-            // the appropriate
-            // login server
-            int namePart = inStream.readUnsignedByte();
+            inStream.readUnsignedByte();
             for (int i = 0; i < 8; i++) {
                 out.write(1);
             } // is being ignored by the client
@@ -7558,9 +7511,7 @@ public class client extends Player implements Runnable {
             // misc.println_debug("Client type: "+((lowMemoryVersion==1) ? "low"
             // : "high")+" memory version");
             for (int i = 0; i < 9; i++) {
-                String junk = Integer.toHexString(inStream.readDWord());
-                // misc.println_debug("dataFileVersion["+i+"]:
-                // 0x"+Integer.toHexString(inStream.readDWord()));
+                Integer.toHexString(inStream.readDWord());
             }
             // don't bother reading the RSA encrypted block because we can't
             // unless
@@ -7674,9 +7625,6 @@ public class client extends Player implements Runnable {
                 return;
             }
 
-            boolean found = false;
-            int type = 5;
-
             if (checkLog("tempbans", playerName)) {
                 println(playerName
                         + " failed to logon because they are tempbanned.");
@@ -7731,7 +7679,7 @@ public class client extends Player implements Runnable {
                 return;
             }
 
-            if (server.playerHandler.isPlayerOn(playerName)) {
+            if (PlayerHandler.isPlayerOn(playerName)) {
                 returnCode = 5;
                 disconnected = true;
                 return;
@@ -7916,7 +7864,7 @@ public class client extends Player implements Runnable {
 
         if (logout) {
             if (fightId > 0) {
-                client f = (client) server.playerHandler.players[fightId];
+                client f = (client) PlayerHandler.players[fightId];
                 if (f != null) {
                     f.fighting = false;
                     f.hits = 0;
@@ -8162,11 +8110,11 @@ public class client extends Player implements Runnable {
     /* Shops */
     public boolean sellItem(int itemID, int fromSlot, int amount) {
         if ((amount > 0) && playerRights != 2 && (itemID == (playerItems[fromSlot] - 1))) {
-            if (server.shopHandler.ShopSModifier[MyShopID] > 1) {
+            if (ShopHandler.ShopSModifier[MyShopID] > 1) {
                 boolean IsIn = false;
 
-                for (int i = 0; i <= server.shopHandler.ShopItemsStandard[MyShopID]; i++) {
-                    if (itemID == (server.shopHandler.ShopItems[MyShopID][i] - 1)) {
+                for (int i = 0; i <= ShopHandler.ShopItemsStandard[MyShopID]; i++) {
+                    if (itemID == (ShopHandler.ShopItems[MyShopID][i] - 1)) {
                         IsIn = true;
                         break;
                     }
@@ -8189,11 +8137,7 @@ public class client extends Player implements Runnable {
                        && (Item.itemStackable[(playerItems[fromSlot] - 1)] == false)) {
                 amount = GetXItemsInBag(itemID);
             }
-            double ShopValue;
-            double TotPrice;
             int TotPrice2;
-            int Overstock;
-
             for (int i = amount; i > 0; i--) {
                 TotPrice2 = (int) Math.floor(GetItemShopValue(itemID, 1,
                                              fromSlot));
@@ -8396,10 +8340,7 @@ public class client extends Player implements Runnable {
     }
 
     public void setEquipment(int wearID, int amount, int targetSlot) {
-        int Stat = playerDefence;
-
         if (targetSlot == playerWeapon) {
-            Stat = playerAttack;
         }
         outStream.createFrameVarSizeWord(34);
         outStream.writeWord(1688);
@@ -8634,7 +8575,7 @@ public class client extends Player implements Runnable {
 
     public void stillgfx(int id, int Y, int X, int height, int time) {
         // for (Player p : server.playerHandler.players) {
-        for (Player p : server.playerHandler.players) {
+        for (Player p : PlayerHandler.players) {
             if (p != null) {
                 client person = (client) p;
 
@@ -8720,7 +8661,7 @@ public class client extends Player implements Runnable {
             sM("Trading has been temporarily disabled");
             return;
         }
-        client other = (client) handler.players[id];
+        client other = (client) PlayerHandler.players[id];
         if (validClient(trade_reqId)) {
             if (other.inTrade) {
                 sM("Other player is busy at the moment.");
@@ -8768,7 +8709,7 @@ public class client extends Player implements Runnable {
     }
 
     public void specialAtk(boolean hitTwice, int specDrain, int projectileHit, int emoteSet) {
-        client AttackingOn2 = (client) server.playerHandler.players[AttackingOn];
+        client AttackingOn2 = (client) PlayerHandler.players[AttackingOn];
         int EnemyX = PlayerHandler.players[AttackingOn].absX;
         int EnemyY = PlayerHandler.players[AttackingOn].absY;
         if(isInWilderness(EnemyX, EnemyY, 1) == false && !AttackingOn2.isInPitGame()) {
@@ -8942,7 +8883,7 @@ public class client extends Player implements Runnable {
 
 
     public void update() {
-        handler.updatePlayer(this, outStream);
+        PlayerHandler.updatePlayer(this, outStream);
         handler.updateNPC(this, outStream);
         flushOutStream();
     }
@@ -8978,7 +8919,7 @@ public class client extends Player implements Runnable {
     }
 
     public boolean validClient(int index) {
-        client p = (client) handler.players[index];
+        client p = (client) PlayerHandler.players[index];
         if ((p != null) && !p.disconnected) {
             return true;
         }
@@ -8995,12 +8936,9 @@ public class client extends Player implements Runnable {
 
     public int WCCheckAxe() {
         int Hand;
-        int Shield;
-        int Bag;
         int Axe;
 
         Hand = playerEquipment[playerWeapon];
-        Shield = playerEquipment[playerShield];
         Axe = 0;
         switch (Hand) {
         case 1351:
@@ -9632,7 +9570,7 @@ public class client extends Player implements Runnable {
         }
     }
     public void yell(String message) {
-        for (Player p : handler.players) {
+        for (Player p : PlayerHandler.players) {
             if ((message.indexOf("tradereq") > 0)
                     || (message.indexOf("duelreq") > 0))
                 return;
